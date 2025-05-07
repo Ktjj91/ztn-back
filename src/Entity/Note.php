@@ -24,23 +24,18 @@ class Note
     private ?int $id =null;
 
     #[ORM\Column(type: Types::BINARY)]
-    #[Groups(['note:write'])]
-    private string $cipherText;
+    private  $cipherText;
 
     #[ORM\Column(type: Types::BINARY)]
-    #[Groups(['note:write'])]
-    private string $iv;
+    private  $iv;
 
     #[ORM\Column(options: ['default' => 1])]
-    #[Groups(['note:read'])]
     private ?int $currentVer = 1;
 
     #[ORM\Column]
-    #[Groups(['note:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['note:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'notes')]
@@ -201,5 +196,25 @@ class Note
         }
 
         return $this;
+    }
+
+    #[Groups(['note:read'])]
+    public function getCipherTextBase64(): ?string
+    {
+        if (is_resource($this->cipherText)) {
+            return base64_encode(stream_get_contents($this->cipherText));
+        }
+
+        return null;
+    }
+
+    #[Groups(['note:read'])]
+    public function getIvBase64(): ?string
+    {
+        if (is_resource($this->iv)) {
+            return base64_encode(stream_get_contents($this->iv));
+        }
+
+        return null;
     }
 }

@@ -13,7 +13,7 @@ class DateSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::VIEW => ['setDate', EventPriorities::PRE_WRITE],
+            KernelEvents::VIEW => ['setDate', EventPriorities::PRE_VALIDATE],
         ];
     }
 
